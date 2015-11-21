@@ -1,4 +1,6 @@
 %NEGATIVE DATA
+
+% Get path to all of the file names in the negative review folder
 negativeFileListPath=fullfile('Data','TrainingData','negative')
 
 for i=1:1000

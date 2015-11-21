@@ -1,4 +1,6 @@
 %POSITIVE DATA
+
+% Get path to all of the file names in the positive review folder
 positiveFileListPath=fullfile('Data','TrainingData','positive')
 %positiveFileList=getAllFiles(positiveFileListPath)
 

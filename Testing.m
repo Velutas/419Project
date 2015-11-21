@@ -1,14 +1,21 @@
-% Initalize Ints
-% FileStart = 'U:\419Project'
-% 
-% Read in the data for all positive reviews
-% 
-% % Get list of all of the file names in the positive review folder
+
+% Get list of all of the file names in the positive review folder
 % filelist = getAllFiles('.\positive');
 % filelist = cellfun(@(x)(x(2:end)), filelist, 'uni', false);
 
+% Read in the data for all positive reviews
 loadPositiveData
+
+% Read in the data for all negative reviews
 loadNegativeData
+
+%load positive vocabulary words
+positiveVocabPath=fullfile('Data','positive.ods');
+positiveVocabulary=readtable(positiveVocabPath);
+
+%load negative vocabulary words
+negativeVocabPath=fullfile('Data','negative.ods');
+negativeVocabulary=readtable(negativeVocabPath);
 
 
 % for i=1:sizeData
