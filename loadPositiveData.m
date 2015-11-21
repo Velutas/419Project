@@ -1,16 +1,10 @@
 %POSITIVE DATA
 
 % Get path to all of the file names in the positive review folder
-positiveFileListPath=fullfile('Data','TrainingData','positive')
-%positiveFileList=getAllFiles(positiveFileListPath)
+positiveFileListPath=fullfile('Data','TrainingData','positiveStemmedTrainingData')
 
 for i=1:1000
-%     filelist(i) = strrep(filelist(i), '.', '');
-    %FullName = strcat(FileStart, filelist(i));
-    
-    
-%     check = 'U:\419Project\positive\file1.txt';
-    %file = fopen('U:\419Project\positive\file1.txt', 'r');
+
     positiveFilePath=strcat(positiveFileListPath,'\file',int2str(i),'.txt')
     positiveFile = fopen(positiveFilePath, 'r');
     
@@ -19,7 +13,7 @@ for i=1:1000
     sizeData = size(positiveData{i});
 
     % Strip invalid characters from the .txt files
-    positiveData{i} = (regexprep(positiveData{i},'[\"123\]\[4567890]', ''));
+    %positiveData{i} = (regexprep(positiveData{i},'[\"123\]\[4567890]', ''));
     
     fclose(positiveFile);
 end

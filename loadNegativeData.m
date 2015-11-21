@@ -1,7 +1,7 @@
 %NEGATIVE DATA
 
 % Get path to all of the file names in the negative review folder
-negativeFileListPath=fullfile('Data','TrainingData','negative')
+negativeFileListPath=fullfile('Data','TrainingData','negativeStemmedTrainingData')
 
 for i=1:1000
 
@@ -13,7 +13,7 @@ for i=1:1000
     sizeData = size(negativeData{i});
 
     % Strip invalid characters from the .txt files
-    negativeData{i} = (regexprep(negativeData{i},'[\"123\]\[4567890]', ''));
+    %negativeData{i} = (regexprep(negativeData{i},'[\"123\]\[4567890]', ''));
     
     fclose(negativeFile);
 end
