@@ -1,6 +1,6 @@
 % Load data to sort into training and test data
-% loadPositiveData;
-% loadNegativeData;
+loadPositiveData;
+loadNegativeData;
 
 % Set variables for Training and Test Data
 PosNum = 1;
@@ -17,7 +17,7 @@ for i=1:1200
         PosNum = PosNum + 1;
     else
         TrainingData{i,1} = negativeData{NegNum};
-        TrainingData{i,2} = 0;
+        TrainingData{i,2} = -1;
         NegNum = NegNum + 1;
     end
 end
@@ -31,7 +31,7 @@ for i=1:800
     else
         if NegNum <= 1000
             TestData{i,1} = negativeData{NegNum};
-            TestData{i,2} = 0;
+            TestData{i,2} = -1;
             NegNum = NegNum + 1;
         else
             TestData{i,1} = positiveData{PosNum};

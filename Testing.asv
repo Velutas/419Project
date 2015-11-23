@@ -26,7 +26,7 @@ negativeVocabulary=readtable(negativeVocabPath);
 negativeVocabulary.Properties.VariableNames{'x2_face'} = 'words';
 positiveVocabulary.Properties.VariableNames{'a_'} = 'words';
 label_train=zeros(sizeTrainingData,1)
-label_test=zeros(sizeTestData,1)
+label_test=zeros(
 error=0
 %strcmp(s1,s2) - compares string values 
 for (i=1:sizeTrainingData)   
@@ -47,24 +47,23 @@ for (i=1:sizeTrainingData)
 end
 fprintf('error %d', error)
 
-errorTest=0
-for (j=1:sizeTestData)   
-    review=TestData{j}
+for (i=1:sizeTrainingData)   
+    review=TrainingData{i}
     review=cell2table(review)
     sizeReview=size(review,1)
     review.Properties.VariableNames{'review'} = 'words';
     negative=intersect(review,negativeVocabulary)
     positive=intersect(review,positiveVocabulary)
     if (size(negative,1)>=size(positive,1))
-        label_test(j)=-1
-    else label_test(j)=1
+        label_train(i)=-1
+    else label_train(i)=1
     end
     
-    if(label_test(j)~=TestData{j,2})
-        errorTest=errorTest+1
+    if(label_train(i)~=TrainingData{i,2})
+        error=error+1
     end   
 end
-fprintf('error %d', errorTest)
+
 % for i=1:sizeData
 %     Data{1}(i)
 % end
