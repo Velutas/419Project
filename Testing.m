@@ -56,7 +56,7 @@ for (j=1:sizeTestData)
     negative=intersect(review,negativeVocabulary)
     positive=intersect(review,positiveVocabulary)
     if (size(negative,1)>=size(positive,1))
-        label_test(j)=-1
+        label_test(j)=2
     else label_test(j)=1
     end
     
@@ -64,7 +64,7 @@ for (j=1:sizeTestData)
         errorTest=errorTest+1
     end   
 end
-fprintf('error %d', errorTest)
+fprintf('error Test%d', errorTest)
 % for i=1:sizeData
 %     Data{1}(i)
 % end
