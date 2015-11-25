@@ -17,7 +17,7 @@ for i=1:1200
         PosNum = PosNum + 1;
     else
         TrainingData{i,1} = negativeData{NegNum};
-        TrainingData{i,2} = -1;
+        TrainingData{i,2} = 2;
         NegNum = NegNum + 1;
     end
 end
@@ -31,7 +31,7 @@ for i=1:800
     else
         if NegNum <= 1000
             TestData{i,1} = negativeData{NegNum};
-            TestData{i,2} = -1;
+            TestData{i,2} = 2;
             NegNum = NegNum + 1;
         else
             TestData{i,1} = positiveData{PosNum};
