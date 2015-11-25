@@ -1,0 +1,33 @@
+%% Count Matrix
+% Anahita Berenji
+% This code implements a matrix representing the number of times each
+% negative word is repeated in a review. Rows represent the 1200 reviews
+% and the columns represent the 2960 possuble negative words
+
+%Load training data
+load('TrainingData.mat');
+sizeTrainingData=size(TrainingData,1);
+
+%Load testing data
+load('TestData.mat');
+sizeTestData=size(TestData,1);
+
+% %load positive vocabulary words
+% positiveVocabPath=fullfile('Data','TextODS','positive.ods');
+% positiveVocabulary=readtable(positiveVocabPath);
+
+%load negative vocabulary words
+[num,txt,raw] = xlsread('negative.xls');
+negativeVocab=txt;
+CMatrix=zeros(sizeTrainingData,2960);
+Rev=TrainingData(:,1);
+for i=1:sizeTrainingData;
+    for j=1:2960;
+        for l=1:size(Rev{i});
+            negativeWord=(negativeVocab{j});
+            ReviewWord=Rev{i}{l}
+            tf=strcmp(negativeWord,ReviewWord);
+            CMatrix(i,j)=CMatrix(i,j)+tf;
+        end
+    end
+end
