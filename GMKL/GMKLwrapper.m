@@ -27,8 +27,8 @@ function GMKLwrapper
 
 
   TYPEreg=1;
-  NUMkernels=3;
-  data=load('toyexample');
+  NUMkernels=2959;
+  data=load('Newexample2');
   
   % The following code shows how to call COMPGDoptimize with
   % feature vectors as input
