@@ -39,15 +39,19 @@ if __name__ == "__main__":
 
     # TASK: Build a vectorizer / classifier pipeline that filters out tokens
     # that are too rare or too frequent
+    
+    # SUPPORT VECTOR MACHINES
     pipeline = Pipeline([
         ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
         ('clf', LinearSVC(C=1000)),
     ])
 
+    #NAIVE BAYES
     text_clf = Pipeline([('vect', CountVectorizer()),
                       ('tfidf', TfidfTransformer()),
                       ('clf', MultinomialNB()),
     ])
+    
     # TASK: Build a grid search to find out whether unigrams or bigrams are
     # more useful.
     # Fit the pipeline on the training set using grid search for the parameters
@@ -90,3 +94,9 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     plt.matshow(cm)
     plt.show()
+
+    import matplotlib.pyplot as plt2
+    plt2.matshow(cm2)
+    plt2.show()
+
+    
