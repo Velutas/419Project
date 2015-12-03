@@ -46,57 +46,59 @@ if __name__ == "__main__":
 
     # SGD Logistic MACHINES
     pipeline3 = Pipeline([
-    ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
+    ('vect', TfidfVectorizer(min_df=1, max_df=0.95)),
     ('clf', SGDClassifier(loss='log')),
     ])
+
+    pipeline4 = Pipeline([
+    ('vect', TfidfVectorizer(min_df=2, max_df=0.95)),
+    ('clf', SGDClassifier(loss='log')),
+    ])
+
 
     
     # SUPPORT VECTOR MACHINES
     pipeline = Pipeline([
-        ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
+        ('vect', TfidfVectorizer(min_df=1, max_df=0.95)),
+        ('clf', LinearSVC(C=1000)),
+    ])
+    pipeline2 = Pipeline([
+        ('vect', TfidfVectorizer(min_df=2, max_df=0.95)),
         ('clf', LinearSVC(C=1000)),
     ])
 
     #print (pipeline)
     #NAIVE BAYES
-    text_clf = Pipeline([('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
+    text_clf = Pipeline([('vect', TfidfVectorizer(min_df=1, max_df=0.95)),
+                      ('clf', MultinomialNB()),
+    ])
+    text_clf2 = Pipeline([('vect', TfidfVectorizer(min_df=2, max_df=0.95)),
                       ('clf', MultinomialNB()),
     ])
 
-    parameters = {'vect__ngram_range': [(1, 1)],
-    }
-
-    parameters2 = {'vect__ngram_range': [(1, 1)],
-               'clf__alpha': (1e-2, 1e-3),
-    }
-    
-    parameters3 = {'vect__ngram_range': [(1, 1)],  # unigrams or bigrams
-                   'clf__alpha': (1e-2, 1e-3),
-                   #'clf__alpha': (0.00001, 0.000001),
-    }
     
     # TASK: Build a grid search to find out whether unigrams or bigrams are
     # more useful.
     # Fit the pipeline on the training set using grid search for the parameters
-    parameters4 = {'vect__ngram_range': [(1, 1), (1, 2)],
+    parameters = {'vect__ngram_range': [(1, 1), (1, 2)],
     }
 
-    parameters5 = {'vect__ngram_range': [(1, 1), (1, 2)],
+    parameters2 = {'vect__ngram_range': [(1, 1), (1, 2)],
                'clf__alpha': (1e-2, 1e-3),
     }
     
-    parameters6 = {'vect__ngram_range': ((1, 1), (1, 2)),  # unigrams or bigrams
+    parameters3 = {'vect__ngram_range': ((1, 1), (1, 2)),  # unigrams or bigrams
                    'clf__alpha': (1e-2, 1e-3),
                    #'clf__alpha': (0.00001, 0.000001),
     }
 
      
     grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search2 = GridSearchCV(pipeline, parameters4, n_jobs=-1)
+    grid_search2 = GridSearchCV(pipeline2, parameters, n_jobs=-1)
     gs_clf = GridSearchCV(text_clf, parameters2, n_jobs=-1)
-    gs_clf2 = GridSearchCV(text_clf, parameters5, n_jobs=-1)
+    gs_clf2 = GridSearchCV(text_clf2, parameters2, n_jobs=-1)
     grid_classification=GridSearchCV(pipeline3, parameters3, n_jobs=-1)
-    grid_classification2=GridSearchCV(pipeline3, parameters6, n_jobs=-1)
+    grid_classification2=GridSearchCV(pipeline4, parameters3, n_jobs=-1)
     #clf = SGDClassifier(**parameters3).fit(docs_train, y_train)
     grid_search.fit(docs_train, y_train)
     gs_clf.fit(docs_train, y_train)
@@ -162,6 +164,3 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt3
     plt3.matshow(cm3)
     plt3.show()
-
-
-   
