@@ -185,11 +185,11 @@ if __name__ == "__main__":
 
     # Print and plot the confusion matrix
     cm = metrics.confusion_matrix(y_test, y_predicted)
-    print("Linear SVM-1:" cm)
+    print("Linear SVM-1:", cm)
     cm4 = metrics.confusion_matrix(y_test, y_predicted4)
-    print("Linear SVM-2:" cm4)
+    print("Linear SVM-2:", cm4)
     cm7 = metrics.confusion_matrix(y_test, y_predicted7)
-    print("Linear SVM-3:" cm7)
+    print("Linear SVM-3:", cm7)
     
     cm2 = metrics.confusion_matrix(y_test, y_predicted2)
     print("MultinomialNB-1:", cm2)
