@@ -91,25 +91,27 @@ if __name__ == "__main__":
     }
 
      
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search2 = GridSearchCV(pipeline, parameters4, n_jobs=-1)
-    gs_clf = GridSearchCV(text_clf, parameters2, n_jobs=-1)
-    gs_clf2 = GridSearchCV(text_clf, parameters5, n_jobs=-1)
-    grid_classification=GridSearchCV(pipeline3, parameters3, n_jobs=-1)
-    grid_classification2=GridSearchCV(pipeline3, parameters6, n_jobs=-1)
-    #clf = SGDClassifier(**parameters3).fit(docs_train, y_train)
-    grid_search.fit(docs_train, y_train)
-    gs_clf.fit(docs_train, y_train)
-    grid_classification.fit(docs_train,y_train)
-    grid_search2.fit(docs_train, y_train)
-    gs_clf2.fit(docs_train, y_train)
-    grid_classification2.fit(docs_train,y_train)
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)#Linear SVM unigrams
+    grid_search2 = GridSearchCV(pipeline, parameters4, n_jobs=-1)#Linear SVM bigrams
+
+    
+    gs_clf = GridSearchCV(text_clf, parameters2, n_jobs=-1)#Multinomial Naive Bayes unigrams
+    gs_clf2 = GridSearchCV(text_clf, parameters5, n_jobs=-1)#Multinomial Naive Bayes bigrams
+    
+    grid_classification=GridSearchCV(pipeline3, parameters3, n_jobs=-1)#SGD Logistic Regression unigrams
+    grid_classification2=GridSearchCV(pipeline3, parameters6, n_jobs=-1)#SGD Logistic Regression bigrams
+    
+    #unigrams
+    grid_search.fit(docs_train, y_train)#LinearSVM
+    gs_clf.fit(docs_train, y_train)#Multinomial NB
+    grid_classification.fit(docs_train,y_train)#SGD Log Reg
+
+    #bigrams
+    grid_search2.fit(docs_train, y_train)#LinearSVM
+    gs_clf2.fit(docs_train, y_train)#Multinomial NB
+    grid_classification2.fit(docs_train,y_train)#SGD Log Reg
 
 
-   
-    prediction1=dataset.target_names[grid_search.predict(['Not Excellent movie!'])]
-    prediction2=dataset.target_names[gs_clf.predict(['Not Excellent film!'])]
-    prediction3=dataset.target_names[grid_classification.predict(['Not Excellent flick!'])]
     # TASK: print the cross-validated scores for the each parameters set
     # explored by the grid search
     print(grid_search.grid_scores_)
@@ -118,39 +120,90 @@ if __name__ == "__main__":
     #print (grid_classification.grid_scores_)
     # TASK: Predict the outcome on the testing set and store it in a variable
     # named y_predicted
+
+    #unigrams
     y_predicted = grid_search.predict(docs_test)
     y_predicted2=gs_clf.predict(docs_test)
     y_predicted3=grid_classification.predict(docs_test)
+
+    #bigrams
     y_predicted4 = grid_search2.predict(docs_test)
     y_predicted5=gs_clf2.predict(docs_test)
     y_predicted6=grid_classification2.predict(docs_test)
+
+    
     # Print the classification report
+    #unigram LinearSVM
     print(metrics.classification_report(y_test, y_predicted,
                                         target_names=dataset.target_names))
+
+    #bigram LinearSVM
     print(metrics.classification_report(y_test, y_predicted4,
                                         target_names=dataset.target_names))
+
+    #unigram Multinomial NB
     print(metrics.classification_report(y_test, y_predicted2,
                                         target_names=dataset.target_names))
+
+    #bigram Multinomial NB
     print(metrics.classification_report(y_test, y_predicted5,
                                         target_names=dataset.target_names))
+
+    #unigram SGD Log Reg
     print(metrics.classification_report(y_test, y_predicted3,
                                         target_names=dataset.target_names))
+
+    #bigram SGD Log Reg
     print(metrics.classification_report(y_test, y_predicted6,
                                         target_names=dataset.target_names))
 
+    
     # Print and plot the confusion matrix
+
+    #unigram LinearSVM
     cm = metrics.confusion_matrix(y_test, y_predicted)
     print(cm)
-    print(prediction1)
-    print (prediction2)
-    print(prediction3)
+
+    #bigram LinearSVM
+    cm4 = metrics.confusion_matrix(y_test, y_predicted4)
+    print(cm4)
+
+    #unigram MultinomialNB
     cm2 = metrics.confusion_matrix(y_test, y_predicted2)
     print(cm2)
 
+    #bigram MultinomialNB
+    cm5 = metrics.confusion_matrix(y_test, y_predicted5)
+    print(cm5)
+
+    #unigram SGD Log Reg    
     cm3 = metrics.confusion_matrix(y_test, y_predicted3)
     print(cm3)
 
+    #bigram SGD Log Reg
+    cm6 = metrics.confusion_matrix(y_test, y_predicted3)
+    print(cm6)
 
+    user=""
+    while user != 'Q':
+        user=input("Enter a phrase to predict: ")
+        prediction1=dataset.target_names[grid_search.predict([user])]
+        prediction2=dataset.target_names[gs_clf.predict([user])]
+        prediction3=dataset.target_names[grid_classification.predict([user])]
+        prediction4=dataset.target_names[grid_search2.predict([user])]
+        prediction5=dataset.target_names[gs_clf2.predict([user])]
+        prediction6=dataset.target_names[grid_classification2.predict([user])]
+        print("Linear SVM Unigram: ",prediction1)
+        print("Linear SVM Bigram: ",prediction4)
+        print ("Multinomial NB Unigram: ",prediction2)
+        print("Multinomial NB Bigram: ",prediction5)
+        print("SGD Log Reg Unigram: ",prediction3)
+        print("SGD Log Reg Unigram: ",prediction6)
+        
+        
+
+
+    
     import matplotlib.pyplot as plt
     plt.matshow(cm)
     plt.show()
@@ -162,6 +215,5 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt3
     plt3.matshow(cm3)
     plt3.show()
-
 
    
