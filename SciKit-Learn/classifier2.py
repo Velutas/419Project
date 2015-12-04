@@ -55,6 +55,11 @@ if __name__ == "__main__":
     ('clf', SGDClassifier(loss='log')),
     ])
 
+    pipeline6 = Pipeline([
+    ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
+    ('clf', SGDClassifier(loss='log')),
+    ])
+
 
     
     # SUPPORT VECTOR MACHINES
@@ -66,6 +71,11 @@ if __name__ == "__main__":
         ('vect', TfidfVectorizer(min_df=2, max_df=0.95)),
         ('clf', LinearSVC(C=1000)),
     ])
+    pipeline5 = Pipeline([
+        ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
+        ('clf', LinearSVC(C=1000)),
+    ])
+    
 
     #print (pipeline)
     #NAIVE BAYES
@@ -75,7 +85,9 @@ if __name__ == "__main__":
     text_clf2 = Pipeline([('vect', TfidfVectorizer(min_df=2, max_df=0.95)),
                       ('clf', MultinomialNB()),
     ])
-
+    text_clf3 = Pipeline([('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
+                      ('clf', MultinomialNB()),
+    ])
     
     # TASK: Build a grid search to find out whether unigrams or bigrams are
     # more useful.
@@ -87,31 +99,41 @@ if __name__ == "__main__":
                'clf__alpha': (1e-2, 1e-3),
     }
     
-    parameters3 = {'vect__ngram_range': ((1, 1), (1, 2)),  # unigrams or bigrams
+    parameters3 = {'vect__ngram_range': ((1, 1), (1, 2)),  #bigrams
                    'clf__alpha': (1e-2, 1e-3),
                    #'clf__alpha': (0.00001, 0.000001),
     }
 
-     
+    #Linear SVM with tf=1,2,3
     grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
     grid_search2 = GridSearchCV(pipeline2, parameters, n_jobs=-1)
+    grid_search3 = GridSearchCV(pipeline5, parameters, n_jobs=-1)
+
+    #Multinomial NB with tf=1,2,3
     gs_clf = GridSearchCV(text_clf, parameters2, n_jobs=-1)
     gs_clf2 = GridSearchCV(text_clf2, parameters2, n_jobs=-1)
+    gs_clf3 = GridSearchCV(text_clf3, parameters2, n_jobs=-1)
+
+    #SGD Log Reg with tf=1,2,3
     grid_classification=GridSearchCV(pipeline3, parameters3, n_jobs=-1)
     grid_classification2=GridSearchCV(pipeline4, parameters3, n_jobs=-1)
-    #clf = SGDClassifier(**parameters3).fit(docs_train, y_train)
+    grid_classification3=GridSearchCV(pipeline6, parameters3, n_jobs=-1)
+
+    #TF-1
     grid_search.fit(docs_train, y_train)
     gs_clf.fit(docs_train, y_train)
     grid_classification.fit(docs_train,y_train)
+
+    #TF-2
     grid_search2.fit(docs_train, y_train)
     gs_clf2.fit(docs_train, y_train)
     grid_classification2.fit(docs_train,y_train)
 
+    #TF-3
+    grid_search3.fit(docs_train, y_train)
+    gs_clf3.fit(docs_train, y_train)
+    grid_classification3.fit(docs_train,y_train)
 
-   
-    prediction1=dataset.target_names[grid_search.predict(['Not Excellent movie!'])]
-    prediction2=dataset.target_names[gs_clf.predict(['Not Excellent film!'])]
-    prediction3=dataset.target_names[grid_classification.predict(['Not Excellent flick!'])]
     # TASK: print the cross-validated scores for the each parameters set
     # explored by the grid search
     print(grid_search.grid_scores_)
@@ -120,37 +142,68 @@ if __name__ == "__main__":
     #print (grid_classification.grid_scores_)
     # TASK: Predict the outcome on the testing set and store it in a variable
     # named y_predicted
+
+    #TF-1
     y_predicted = grid_search.predict(docs_test)
     y_predicted2=gs_clf.predict(docs_test)
     y_predicted3=grid_classification.predict(docs_test)
+
+    #TF-2
     y_predicted4 = grid_search2.predict(docs_test)
     y_predicted5=gs_clf2.predict(docs_test)
     y_predicted6=grid_classification2.predict(docs_test)
+
+    #TF-3
+    y_predicted7 = grid_search3.predict(docs_test)
+    y_predicted8=gs_clf3.predict(docs_test)
+    y_predicted9=grid_classification3.predict(docs_test)
+    
     # Print the classification report
+    #Linear SVM 1,2,3
     print(metrics.classification_report(y_test, y_predicted,
                                         target_names=dataset.target_names))
     print(metrics.classification_report(y_test, y_predicted4,
                                         target_names=dataset.target_names))
+    print(metrics.classification_report(y_test, y_predicted7,
+                                        target_names=dataset.target_names))
+
+    #Multinomail NB 1,2,3
     print(metrics.classification_report(y_test, y_predicted2,
                                         target_names=dataset.target_names))
     print(metrics.classification_report(y_test, y_predicted5,
                                         target_names=dataset.target_names))
+    print(metrics.classification_report(y_test, y_predicted8,
+                                        target_names=dataset.target_names))
+
+    #SGD Log Reg 1,2,3
     print(metrics.classification_report(y_test, y_predicted3,
                                         target_names=dataset.target_names))
     print(metrics.classification_report(y_test, y_predicted6,
                                         target_names=dataset.target_names))
+    print(metrics.classification_report(y_test, y_predicted9,
+                                        target_names=dataset.target_names))
 
     # Print and plot the confusion matrix
     cm = metrics.confusion_matrix(y_test, y_predicted)
-    print(cm)
-    print(prediction1)
-    print (prediction2)
-    print(prediction3)
+    print("Linear SVM-1:" cm)
+    cm4 = metrics.confusion_matrix(y_test, y_predicted4)
+    print("Linear SVM-2:" cm4)
+    cm7 = metrics.confusion_matrix(y_test, y_predicted7)
+    print("Linear SVM-3:" cm7)
+    
     cm2 = metrics.confusion_matrix(y_test, y_predicted2)
-    print(cm2)
+    print("MultinomialNB-1:", cm2)
+    cm5 = metrics.confusion_matrix(y_test, y_predicted5)
+    print("MultinomialNB-2:", cm5)
+    cm8 = metrics.confusion_matrix(y_test, y_predicted8)
+    print("MultinomialNB-3:", cm8)
 
     cm3 = metrics.confusion_matrix(y_test, y_predicted3)
-    print(cm3)
+    print("SGD LG-1:", cm3)
+    cm6 = metrics.confusion_matrix(y_test, y_predicted6)
+    print("SGD LG-2:", cm6)
+    cm9 = metrics.confusion_matrix(y_test, y_predicted9)
+    print("SGD LG-3:", cm9)
 
 
     import matplotlib.pyplot as plt
