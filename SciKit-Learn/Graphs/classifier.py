@@ -110,14 +110,30 @@ def RunCompare():
                        'clf__alpha': (1e-2, 1e-3),
                        #'clf__alpha': (0.00001, 0.000001),
         }
+		
+		parameters7 = {'vect__ngram_range': [(1, 1), (1, 2), (1,3)],
+		}
+
+		parameters8 = {'vect__ngram_range': [(1, 1), (1, 2), (1,3)],
+               'clf__alpha': (1e-2, 1e-3),
+		}
+    
+		parameters9 = {'vect__ngram_range': ((1, 1), (1, 2), (1,3)),  # unigrams or bigrams
+                   'clf__alpha': (1e-2, 1e-3),
+                   #'clf__alpha': (0.00001, 0.000001),
+		}
+		
 
          
         grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
         grid_search2 = GridSearchCV(pipeline, parameters4, n_jobs=-1)
+		grid_search3 = GridSearchCV(pipeline, parameters7, n_jobs=-1)#Linear SVM trigrams
         gs_clf = GridSearchCV(text_clf, parameters2, n_jobs=-1)
         gs_clf2 = GridSearchCV(text_clf, parameters5, n_jobs=-1)
+		gs_clf3 = GridSearchCV(text_clf, parameters8, n_jobs=-1)#Multinomial Naive Bayes trigrams
         grid_classification=GridSearchCV(pipeline3, parameters3, n_jobs=-1)
         grid_classification2=GridSearchCV(pipeline3, parameters6, n_jobs=-1)
+		grid_classification3=GridSearchCV(pipeline3, parameters9, n_jobs=-1)#SGD Logistic Regression trigrams
         #clf = SGDClassifier(**parameters3).fit(docs_train, y_train)
         grid_search.fit(docs_train, y_train)
         gs_clf.fit(docs_train, y_train)
@@ -125,6 +141,9 @@ def RunCompare():
         grid_search2.fit(docs_train, y_train)
         gs_clf2.fit(docs_train, y_train)
         grid_classification2.fit(docs_train,y_train)
+		grid_search3.fit(docs_train, y_train)
+        gs_clf3.fit(docs_train, y_train)
+        grid_classification3.fit(docs_train,y_train)
 
 
        
@@ -145,6 +164,10 @@ def RunCompare():
         y_predicted4 = grid_search2.predict(docs_test)
         y_predicted5=gs_clf2.predict(docs_test)
         y_predicted6=grid_classification2.predict(docs_test)
+		y_predicted7 = grid_search2.predict(docs_test)
+        y_predicted8=gs_clf2.predict(docs_test)
+        y_predicted9=grid_classification2.predict(docs_test)
+		
         # Print the classification report
         print(metrics.classification_report(y_test, y_predicted,
                                             target_names=dataset.target_names))
